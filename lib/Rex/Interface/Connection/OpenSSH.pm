@@ -61,9 +61,6 @@ sub connect {
   $port    ||= Rex::Config->get_port( server => $server )    || 22;
   $timeout ||= Rex::Config->get_timeout( server => $server ) || 3;
 
-  $server =
-    Rex::Config->get_ssh_config_hostname( server => $server ) || $server;
-
   ( $server, $port ) = Rex::Helper::IP::get_server_and_port( $server, $port );
 
   Rex::Logger::debug( "Connecting to $server:$port (" . $user . ")" );
@@ -91,7 +88,6 @@ sub connect {
   }
 
   my @connection_props = ( "" . $server ); # stringify server object, so that a dumper don't print out passwords.
-  push @connection_props, ( user => $user, port => $port );
 
   if (@ssh_opts_line) {
     if ( !$net_openssh_constructor_options{external_master} ) {
